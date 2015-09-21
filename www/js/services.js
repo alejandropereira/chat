@@ -51,4 +51,25 @@ angular.module('starter.services', [])
 .factory("Auth", function($firebaseAuth) {
   var usersRef = new Firebase("https//sweltering-fire-7423.firebaseio.com/users");
   return $firebaseAuth(usersRef);
+})
+.factory("User", function($firebaseArray){
+  var usersRef = new Firebase("https//sweltering-fire-7423.firebaseio.com/users");
+  var users = $firebaseArray(usersRef);
+  var userService = {
+    all: users,
+    createUser: function(authData){
+      usersRef.child(authData.uid).set(authData.facebook);
+    },
+    isNewUser: function(uid){
+      usersRef.child(uid).once('value', function(snapshot) {
+        if (snapshot.val() === null) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+  };
+
+  return userService;
 });
