@@ -22,6 +22,7 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.
     }
   });
 })
+.constant('FACEBOOK_ID', '1602791423321101')
 
 .config(function($stateProvider, $urlRouterProvider) {
 
