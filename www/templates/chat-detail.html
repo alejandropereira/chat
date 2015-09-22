@@ -4,11 +4,63 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view view-title="{{chat.name}}">
-  <ion-content class="padding">
-    <img ng-src="{{chat.face}}" style="width: 64px; height: 64px">
-    <p>
-      {{chat.lastText}}
-    </p>
+<ion-view view-title="{{toUser.displayName}}">
+  <ion-content class="has-header has-footer padding" delegate-handle="userMessageScroll">
+  <div ng-repeat="message in messages" class="message-wrapper">
+
+    <div ng-if="user.uid !== message.uid">
+
+      <img class="profile-pic left" 
+      ng-src="{{toUser.profileImageURL}}" />
+
+      <div class="chat-bubble left">
+
+        <div class="message" ng-bind-html="message.body">
+        </div>
+
+        <div class="message-detail">
+          <span 
+            class="bold">{{toUser.displayName}}</span>, 
+          <span am-time-ago="message.timestamp"></span>
+        </div>
+
+      </div>
+    </div>
+
+    <div ng-if="user.uid === message.uid">
+
+      <img class="profile-pic right" 
+      ng-src="{{user.facebook.profileImageURL}}" />
+
+      <div class="chat-bubble right">
+
+        <div class="message" ng-bind-html="message.body">
+        </div>
+
+        <div class="message-detail">
+          <span 
+            class="bold">{{user.facebook.displayName}}</span>, 
+          <span am-time-ago="message.timestamp"></span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="cf"></div>
+
+  </div>
   </ion-content>
+  <form name="sendMessageForm" ng-submit="sendMessage()" novalidate>
+    <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+    <label class="item-input-wrapper">
+      <textarea ng-model="message" value="" placeholder="Send {{toUser.username}} a message..." required minlength="1" maxlength="1500" msd-elastic></textarea>
+    </label>
+    <div class="footer-btn-wrap">
+      <button class="button button-icon icon ion-android-send footer-btn" type="submit"
+        ng-disabled="!message || message === ''">
+      </button>
+    </div>
+    </ion-footer-bar>
+  </form>
 </ion-view>

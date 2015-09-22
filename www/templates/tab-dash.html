@@ -1,7 +1,7 @@
 <ion-view view-title="Friends">
   <ion-content>
     <ion-list>
-      <ion-item class="item-avatar item-icon-right" ng-repeat="friend in friends" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+    <ion-item class="item-avatar item-icon-right" ng-repeat="friend in friends" ng-if="friend.$id!=currentUserID" type="item-text-wrap" ui-sref="tab.chat-detail({uid: friend.$id})" nav-direction="forward">
         <img ng-src="{{friend.profileImageURL}}">
         {{friend.displayName}}
         <i class="icon ion-chevron-right icon-accessory"></i>

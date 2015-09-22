@@ -48,24 +48,39 @@ angular.module('starter.services', [])
     }
   };
 })
-.factory("Auth", function($firebaseAuth) {
-  var usersRef = new Firebase("https//sweltering-fire-7423.firebaseio.com/users");
+
+.factory("Messages", function(FirebaseUrl, $firebaseArray){
+  var userMessagesRef = new Firebase(FirebaseUrl+'userMessages');
+
+  return {
+    forUsers: function(uid1, uid2){
+      var path = uid1 < uid2 ? uid1+'/'+uid2 : uid2+'/'+uid1;
+
+      return $firebaseArray(userMessagesRef.child(path));
+    }
+  };
+})
+
+.factory("Auth", function(FirebaseUrl, $firebaseAuth) {
+  var usersRef = new Firebase(FirebaseUrl+'users');
+
   return $firebaseAuth(usersRef);
 })
-.factory("User", function($firebaseArray){
-  var usersRef = new Firebase("https//sweltering-fire-7423.firebaseio.com/users");
+
+.factory("User", function(FirebaseUrl, $firebaseArray, $firebaseObject){
+  var usersRef = new Firebase(FirebaseUrl+'users');
   var users = $firebaseArray(usersRef);
+
   var userService = {
     all: users,
-    createUser: function(authData){
-      usersRef.child(authData.uid).set(authData.facebook);
+    find: function(uid){
+      var userRef = new Firebase(FirebaseUrl+'users/'+uid)
+      return $firebaseObject(userRef);
     },
-    isNewUser: function(uid){
-      usersRef.child(uid).once('value', function(snapshot) {
+    createUser: function(authData){
+      usersRef.child(authData.uid).once('value', function(snapshot) {
         if (snapshot.val() === null) {
-          return true;
-        } else {
-          return false;
+          usersRef.child(authData.uid).set(authData.facebook);
         }
       });
     }

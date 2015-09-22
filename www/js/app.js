@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -22,7 +22,8 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.
     }
   });
 })
-.constant('FACEBOOK_ID', '1602791423321101')
+
+.value('FirebaseUrl', 'https//sweltering-fire-7423.firebaseio.com/')
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -36,8 +37,9 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.
       templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
     })
+
   // setup an abstract state for the tabs directive
-    .state('tab', {
+  .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html'
@@ -52,27 +54,31 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.
         templateUrl: 'templates/tab-dash.html',
         controller: 'DashCtrl'
       }
+    },
+    resolve: {
+      "currentAuth": ["Auth", function(Auth){
+        return Auth.$requireAuth();
+      }]
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
-        }
+  .state('tab.chat-detail', {
+    url: '/dash/:uid',
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/chat-detail.html',
+        controller: 'ChatDetailCtrl',
       }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
+    },
+    resolve: {
+      "currentAuth": ["Auth", function(Auth){
+        return Auth.$requireAuth();
+      }],
+      "toUser": ["User", "$stateParams", function(User, $stateParams){
+        return User.find($stateParams.uid);
+      }]
+    }
+  })
 
   .state('tab.account', {
     url: '/account',
@@ -82,7 +88,8 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.
         controller: 'AccountCtrl'
       }
     }
-  });
+  })
+
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
