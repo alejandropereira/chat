@@ -1,9 +1,11 @@
 angular.module('starter.controllers', [])
 
-.controller("LoginCtrl", function($scope, $rootScope, Auth, $state, $ionicLoading, User) {
+.controller("LoginCtrl", function($scope, $rootScope, Auth, $state, User, $ionicLoading) {
 
   $scope.login = function(authMethod) {
-    var ref = new Firebase("https//sweltering-fire-7423.firebaseio.com/users");
+    $ionicLoading.show({
+      template: 'logging in please sit tight...'
+    });
 
     Auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
     }).catch(function(error) {
@@ -16,19 +18,17 @@ angular.module('starter.controllers', [])
     });
 
     Auth.$onAuth(function(authData) {
-      $ionicLoading.hide();
-
       if (authData === null) {
         console.log("Not logged in yet");
       } else {
-
         User.createUser(authData);
+        $ionicLoading.hide();
         console.log("Logged in as", authData.uid);
         $state.go('tab.dash');
       }
       $scope.authData = authData; // This will display the user's name in our view
     });
-  }
+  };
 })
 
 
@@ -37,22 +37,7 @@ angular.module('starter.controllers', [])
   $scope.currentUserID = currentAuth.uid;
 })
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
-
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats, currentAuth, Messages, User, toUser, $ionicScrollDelegate, $timeout) {
+.controller('ChatDetailCtrl', function($scope, $stateParams, currentAuth, Messages, toUser, $ionicScrollDelegate, $timeout) {
   var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
 
   $scope.$on('$ionicView.enter', function() {
@@ -75,12 +60,12 @@ angular.module('starter.controllers', [])
         timestamp: Firebase.ServerValue.TIMESTAMP
       }).then(function(){
         $scope.message = '';
+        $timeout(function() {
+          viewScroll.scrollBottom(true);
+        }, 0);
       });
-      $timeout(function() {
-        viewScroll.scrollBottom(true);
-      }, 0);
     }
-  } 
+  };
 })
 
 .controller('AccountCtrl', function($scope, $state, Auth) {

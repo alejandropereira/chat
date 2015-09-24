@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -27,6 +27,9 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.contro
 
 .config(function($stateProvider, $urlRouterProvider) {
 
+  // if none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('/login');
+
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
@@ -35,7 +38,12 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.contro
     .state('login', {
 		  url: '/login',
       templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
+      controller: 'LoginCtrl',
+      resolve: {
+        "currentAuth": ["Auth", function(Auth){
+          return Auth.$waitForAuth();
+        }]
+      }
     })
 
   // setup an abstract state for the tabs directive
@@ -88,10 +96,6 @@ angular.module('starter', ['ionic', 'firebase', 'angularMoment', 'starter.contro
         controller: 'AccountCtrl'
       }
     }
-  })
-
-
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  });
 
 });
