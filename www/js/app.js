@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.services', 'yaru22.angular-timeago'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -24,14 +24,18 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.
 })
 
 .value('FirebaseUrl', 'https//sweltering-fire-7423.firebaseio.com/')
+.constant('FACEBOOK_APP_ID', '1602791423321101')
+
+.config(function($stateProvider, $urlRouterProvider, FACEBOOK_APP_ID) {
+  openFB.init({appId: FACEBOOK_APP_ID});
+})
 
 .config(function($stateProvider, $urlRouterProvider) {
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
+  // Ionic uses AngularUI Router which uses the concept of states // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider

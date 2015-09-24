@@ -21,7 +21,7 @@
         <div class="message-detail">
           <span 
             class="bold">{{toUser.displayName}}</span>, 
-          <span am-time-ago="message.timestamp"></span>
+          <span ng-bind="message.timestamp | timeAgo"></span>
         </div>
 
       </div>
@@ -40,7 +40,7 @@
         <div class="message-detail">
           <span 
             class="bold">{{user.facebook.displayName}}</span>, 
-          <span am-time-ago="message.timestamp"></span>
+          <span ng-bind="message.timestamp | timeAgo"></span>
         </div>
 
       </div>

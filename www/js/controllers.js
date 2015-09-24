@@ -1,33 +1,19 @@
 angular.module('starter.controllers', [])
 
-.controller("LoginCtrl", function($scope, $rootScope, Auth, $state, User, $ionicLoading) {
+.controller("LoginCtrl", function($scope, $state, User, $ionicLoading) {
+
+  $scope.loggingIn = false;
 
   $scope.login = function(authMethod) {
-    $ionicLoading.show({
-      template: 'logging in please sit tight...'
-    });
 
-    Auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
-    }).catch(function(error) {
-      if (error.code === 'TRANSPORT_UNAVAILABLE') {
-        Auth.$authWithOAuthPopup(authMethod).then(function(authData) {
-        });
-      } else {
-        console.log(error);
-      }
-    });
+    if(!$scope.loggingIn){
+      $scope.loggingIn = true;
 
-    Auth.$onAuth(function(authData) {
-      if (authData === null) {
-        console.log("Not logged in yet");
-      } else {
-        User.createUser(authData);
-        $ionicLoading.hide();
-        console.log("Logged in as", authData.uid);
+      User.loginUser().then(function(){
+        $scope.loggingIn = false;
         $state.go('tab.dash');
-      }
-      $scope.authData = authData; // This will display the user's name in our view
-    });
+      });
+    }
   };
 })
 
@@ -53,17 +39,14 @@ angular.module('starter.controllers', [])
   });
 
   $scope.sendMessage = function(){
-    if($scope.message.length > 0){
+    if($scope.message){
       $scope.messages.$add({
         uid: currentAuth.uid,
         body: $scope.message,
         timestamp: Firebase.ServerValue.TIMESTAMP
-      }).then(function(){
-        $scope.message = '';
-        $timeout(function() {
-          viewScroll.scrollBottom(true);
-        }, 0);
       });
+      $scope.message = '';
+      viewScroll.scrollBottom(true);
     }
   };
 })

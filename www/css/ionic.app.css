@@ -7730,9 +7730,6 @@ a.button {
   -ms-flex-align: center;
   align-items: center; }
 
-body {
-  cursor: url('http://ionicframework.com/img/finger.png'), auto; }
-
 /* allows the bar-footer to be elastic /*
 /* optionally set a max-height */
 /* maxlength on the textarea will prevent /*
@@ -7896,5 +7893,6 @@ a.autolinker {
   -ms-flex-align: center;
   align-items: center; }
 
-.loader .ion-loading-c {
-  font-size: 64px; }
+.spinner svg {
+  width: 55px;
+  height: 55px; }
