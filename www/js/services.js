@@ -1,15 +1,24 @@
 angular.module('starter.services', [])
 
-.factory("Messages", function(FirebaseUrl, $firebaseArray){
+.factory("Messages", function(FirebaseUrl, $firebaseArray, $q){
   var userMessagesRef = new Firebase(FirebaseUrl+'userMessages');
 
-  return {
+  var self = {
+    messages: {},
     forUsers: function(uid1, uid2){
+      var d = $q.defer();
       var path = uid1 < uid2 ? uid1+'/'+uid2 : uid2+'/'+uid1;
 
-      return $firebaseArray(userMessagesRef.child(path));
+      self.messages = $firebaseArray(userMessagesRef.child(path));
+      self.messages.$loaded(function(){
+        d.resolve(self.messages);
+      });
+
+      return d.promise;
     }
   };
+
+  return self;
 })
 
 .factory("Auth", function(FirebaseUrl, $firebaseAuth) {
@@ -24,7 +33,16 @@ angular.module('starter.services', [])
 
   var self = {
     current: {},
-    all: users,
+    users: {},
+    all: function(){
+      var d = $q.defer();
+      self.users = users; 
+      self.users.$loaded(function(){
+        d.resolve(self.users);
+      });
+
+      return d.promise;
+    },
     find: function(uid){
       var userRef = new Firebase(FirebaseUrl+'users/'+uid);
       return $firebaseObject(userRef);

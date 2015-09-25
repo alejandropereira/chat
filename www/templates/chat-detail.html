@@ -6,7 +6,12 @@
 -->
 <ion-view view-title="{{toUser.displayName}}">
   <ion-content class="has-header has-footer padding" delegate-handle="userMessageScroll">
-  <div ng-repeat="message in messages" class="message-wrapper">
+  <div class="loader-center" ng-if="loggingIn">
+    <div class="loader">
+      <ion-spinner icon="spiral"></ion-spinner>
+    </div>
+  </div>
+  <div ng-repeat="message in messages" class="message-wrapper" ng-if="!loggingIn">
 
     <div ng-if="user.uid !== message.uid">
 
@@ -21,6 +26,7 @@
         <div class="message-detail">
           <span 
             class="bold">{{toUser.displayName}}</span>, 
+          <br>
           <span ng-bind="message.timestamp | timeAgo"></span>
         </div>
 
@@ -39,7 +45,8 @@
 
         <div class="message-detail">
           <span 
-            class="bold">{{user.facebook.displayName}}</span>, 
+            class="bold">{{user.facebook.displayName}}</span>
+          <br>
           <span ng-bind="message.timestamp | timeAgo"></span>
         </div>
 

@@ -19,15 +19,21 @@ angular.module('starter.controllers', [])
 
 
 .controller('DashCtrl', function($scope, User, currentAuth) {
-  $scope.friends = User.all;
+  $scope.loggingIn = true;
+  User.all().then(function(data){
+    $scope.loggingIn = false;
+    $scope.friends = data;
+  });
   $scope.currentUserID = currentAuth.uid;
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, currentAuth, Messages, toUser, $ionicScrollDelegate, $timeout) {
   var viewScroll = $ionicScrollDelegate.$getByHandle('userMessageScroll');
+  $scope.loggingIn = true;
 
   $scope.$on('$ionicView.enter', function() {
-    Messages.forUsers($stateParams.uid, currentAuth.uid).$loaded().then(function(data){
+    Messages.forUsers($stateParams.uid, currentAuth.uid).then(function(data){
+      $scope.loggingIn = false;
       $scope.messages = data;
 
       $timeout(function() {
@@ -46,7 +52,9 @@ angular.module('starter.controllers', [])
         timestamp: Firebase.ServerValue.TIMESTAMP
       });
       $scope.message = '';
-      viewScroll.scrollBottom(true);
+      $timeout(function() {
+        viewScroll.scrollBottom(true);
+      }, 600);
     }
   };
 })
