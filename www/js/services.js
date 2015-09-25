@@ -99,6 +99,8 @@ angular.module('starter.services', [])
                         });
                         
                       });
+                  }).catch(function(error){
+                    console.error("Authentication failed:", error);
                   });
 
               },

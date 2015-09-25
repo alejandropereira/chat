@@ -6,9 +6,13 @@
       </div>
     </div>
     <ion-list ng-if="!loggingIn">
+      {{friends.count()}}
+      <ion-item ng-hide="friends.length > 1">
+        No users yet!
+      </ion-item>
       <ion-item class="item-avatar item-icon-right" ng-repeat="friend in friends" ng-if="friend.$id!=currentUserID" type="item-text-wrap" ui-sref="tab.chat-detail({uid: friend.$id})" nav-direction="forward">
-        <img ng-src="{{friend.profileImageURL}}">
-        {{friend.displayName}}
+        <img ng-src="{{friend.profilePic}}">
+        {{friend.name}}
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>

@@ -23,6 +23,7 @@ angular.module('starter.controllers', [])
   User.all().then(function(data){
     $scope.loggingIn = false;
     $scope.friends = data;
+    console.log(data.length);
   });
   $scope.currentUserID = currentAuth.uid;
 })
@@ -41,6 +42,7 @@ angular.module('starter.controllers', [])
       }, 0);
     });
     $scope.user = currentAuth;
+    console.log(currentAuth);
     $scope.toUser = toUser;
   });
 

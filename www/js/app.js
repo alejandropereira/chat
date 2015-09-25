@@ -23,7 +23,7 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.
   });
 })
 
-.value('FirebaseUrl', 'https//sweltering-fire-7423.firebaseio.com/')
+.value('FirebaseUrl', 'https://vivid-inferno-8367.firebaseio.com/')
 .constant('FACEBOOK_APP_ID', '1602791423321101')
 
 .config(function($stateProvider, $urlRouterProvider, FACEBOOK_APP_ID) {

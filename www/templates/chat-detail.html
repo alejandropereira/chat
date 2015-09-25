@@ -12,11 +12,10 @@
     </div>
   </div>
   <div ng-repeat="message in messages" class="message-wrapper" ng-if="!loggingIn">
-
     <div ng-if="user.uid !== message.uid">
 
       <img class="profile-pic left" 
-      ng-src="{{toUser.profileImageURL}}" />
+      ng-src="{{toUser.profilePic}}" />
 
       <div class="chat-bubble left">
 
@@ -25,7 +24,7 @@
 
         <div class="message-detail">
           <span 
-            class="bold">{{toUser.displayName}}</span>, 
+            class="bold">{{toUser.name}}</span>, 
           <br>
           <span ng-bind="message.timestamp | timeAgo"></span>
         </div>
