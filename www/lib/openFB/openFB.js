@@ -150,6 +150,7 @@ function login(callback, options) {
 
   function show_loading(){
     ActivityIndicator.show("Please Wait", "Its loading....");
+    loginWindow.removeEventListener('loadstart', show_loading);
   }
 
   function hide_loading(){
